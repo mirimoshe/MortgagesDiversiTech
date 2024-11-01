@@ -11,7 +11,7 @@ In this project, we used Angular to create a responsive and accessible user inte
 **Angular CLI** - I am experienced with the Angular CLI, using it to scaffold components, generate services, and streamline development workflows.  
 **HTTPClient** - I’ve worked with Angular’s HttpClient module to manage HTTP requests and handle API communication  
 
-## Instalation
+## Installation 🚀
 **1.** Clone the repository: git clone https://github.com/mirimoshe/MortgagesDiversiTech.git   
 **2.** Navigate to the project directory : cd front  
 **3.** Install dependencies: npm install  
