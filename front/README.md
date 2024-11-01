@@ -12,8 +12,8 @@ In this project, we used Angular to create a responsive and accessible user inte
 **HTTPClient** - I’ve worked with Angular’s HttpClient module to manage HTTP requests and handle API communication  
 
 ## Instalation
-**1.** Clone the repository: git clone   
-**2.** Navigate to the project directory : cd front
-**3.** Install dependencies: npm install
-**4.** Start the application: npm start
-**5.** Open in browser at http://localhost:4200.
+**1.** Clone the repository: git clone https://github.com/mirimoshe/MortgagesDiversiTech.git   
+**2.** Navigate to the project directory : cd front  
+**3.** Install dependencies: npm install  
+**4.** Start the application: npm start  
+**5.** Open in browser at http://localhost:4200.  
