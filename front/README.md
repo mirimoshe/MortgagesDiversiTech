@@ -1,6 +1,6 @@
 # Mortgages Project DiversiTech - Front
 
-## Project Description
+## Project description 💻
 In this project, we used Angular to create a responsive and accessible user interface. My team and I developed Angular Material components to ensure a stable and visually consistent design, with a focus on accessibility features to enhance user experience for all audiences.
 
 ## Technologies ⚙️
