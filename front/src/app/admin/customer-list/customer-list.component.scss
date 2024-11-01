@@ -1,0 +1,59 @@
+@media screen and (max-width: 900px) {
+  .mat-table {
+    padding: 1px !important;
+    font-size: 12px !important;
+    
+  }
+
+
+  .mat-cell {
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: 0px !important;
+    max-height: min-content !important;
+  }
+
+  mat-icon {
+    font-size: 20px !important;
+  }
+
+  .th,
+  td,
+  ng-container {
+    padding: 1vw !important;
+    margin: 1vw !important;
+  }
+}
+
+th {
+  font-weight: bold !important;
+}
+
+#main {
+  margin-left: 40px;
+  display: flex;
+  width: 70vw;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  border: none;
+  margin: 0 auto;
+}
+
+
+:host {
+  background-color: transparent;
+}
+
+.component-title {
+  font-size: 1.5em;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: right;
+  color: #333; 
+}
+.contents{
+  padding: 10px;
+  margin-bottom: 10px;
+
+}

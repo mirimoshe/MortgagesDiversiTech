@@ -1,0 +1,33 @@
+<section class="chart-container">
+  <!-- כותרת עמוד -->
+  <header class="chart-header">
+    <h1>גרפים ונתונים</h1>
+  </header>
+
+  <!-- לחצנים לבחירת סוג הגרף -->
+  <div class="chart-actions">
+    <button mat-stroked-button (click)="initializeChart1()" class="action-button">
+      גרף נתונים
+    </button>
+    <button mat-stroked-button (click)="initializeChart2()" class="action-button">
+      גרף לידים / לקוחות לפי חודשים
+    </button>
+    <button mat-stroked-button (click)="initializeChart3()" class="action-button">
+      נתוני מסמכי לקוחות
+    </button>
+  </div>
+
+  <!-- גרף או הודעת אין נתונים -->
+  <article class="chart-content">
+    <div *ngIf="chartOptions; else noChart">
+      <canvasjs-chart [options]="chartOptions"></canvasjs-chart>
+    </div>
+    <ng-template #noChart>
+      <div class="no-chart-message">
+        <mat-icon>info</mat-icon>
+        <p>בחר גרף מהלחצנים למעלה כדי להציג נתונים כאן.</p>
+      </div>
+    </ng-template>
+  </article>
+</section>
+

@@ -1,0 +1,29 @@
+<div class="email-container">
+  <div class="email-content">
+    <div class="header-section">
+      <h1 class="main-title">שליחת מייל ללקוחות</h1>
+      <p class="sub-title">ההודעה תשלח לכל הלקוחות הנוכחיים (לא ישלח ללקוחות מהארכיון ולידים)</p>
+    </div>
+
+    <form [formGroup]="mailingListForm" (ngSubmit)="onSubmit()" class="email-form">
+      <mat-form-field appearance="outline" class="email-field">
+        <mat-label><mat-icon>subject</mat-icon> נושא</mat-label>
+        <input matInput formControlName="subject" placeholder="הכנס נושא">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="email-field">
+        <mat-label><mat-icon>message</mat-icon> הודעה</mat-label>
+        <textarea matInput formControlName="message" placeholder="הכנס הודעה"></textarea>
+      </mat-form-field>
+
+      <div class="action-buttons">
+        <button mat-flat-button color="primary" type="submit" [disabled]="!isFormValid()" class="send-button">
+          <mat-icon>send</mat-icon> שלח מייל
+        </button>
+        <button mat-flat-button color="warn" type="button" (click)="clearFormFields()" class="clear-button">
+          <mat-icon>delete</mat-icon> נקה שדות
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

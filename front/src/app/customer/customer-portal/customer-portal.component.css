@@ -1,0 +1,7 @@
+#mainPage {
+  background-color: transparent;
+  min-height: -moz-max-content 100vh;
+  min-height: max-content 100vh;
+  background-image: url("/assets/background.jpg");
+  background-size: cover;
+}/*# sourceMappingURL=customer-portal.component.css.map */

@@ -1,0 +1,7 @@
+div {
+  background-color: transparent;
+  min-height: -moz-max-content 100vh;
+  min-height: max-content 100vh;
+  background-image: url("/assets/background.jpg");
+  background-size: cover;
+}/*# sourceMappingURL=admin-dashboard.component.css.map */

@@ -1,0 +1,230 @@
+<main style="background-color: rgba(255, 255, 255, 0.708);padding-bottom: 150px;padding-top: 20px;">
+  <header class="header-container">
+    <div class="header-content">
+      <h1 class="header-title">ניהול מסמכים</h1>
+      <h2 class="header-subtitle">העלה, נהל וצפה במסמכים שלך בקלות</h2>
+    </div>
+    @if (this.loginService.isAdmin()) {
+    <mat-form-field appearance="outline" style=" width: 68vw; margin-left: 50px;margin-right: 50px;">
+      <mat-label>חפש לקוח</mat-label>
+      <input type="text" matInput [formControl]="customerControl" [matAutocomplete]="auto">
+      <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayCustomer"
+        (optionSelected)="onCustomerSelected($event.option.value)">
+        <mat-option *ngFor="let customer of filteredCustomers | async" [value]="customer">
+          {{ customer.first_Name }} {{customer.last_Name}} {{customer.phone}}
+        </mat-option>
+      </mat-autocomplete>
+      <mat-icon matSuffix>search</mat-icon>
+      <mat-hint>חפש לקוח על מנת לנהל את המסמכים שלו</mat-hint>
+    </mat-form-field>
+    }
+  </header>
+
+  <div class="content-container">
+    @if(dataSource.data.length > 0) {
+    <mat-table [dataSource]="dataSource" matSort>
+      <ng-container matColumnDef="task_description">
+        <mat-header-cell *matHeaderCellDef>שם</mat-header-cell>
+        <mat-cell *matCellDef="let element">{{ element.task_description }}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="document_type_id">
+        <mat-header-cell *matHeaderCellDef>סוג</mat-header-cell>
+        <mat-cell *matCellDef="let element">{{changeTransacTypeToString(element.document_type_id) }}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="status">
+        <mat-header-cell *matHeaderCellDef>סטטוס מסמך הלקוח</mat-header-cell>
+        <mat-cell *matCellDef="let element">{{ changeDocStatusToString(element.status) }}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="document_path">
+        <mat-header-cell *matHeaderCellDef>מסמך לקוח</mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <!-- Admin view -->
+          <ng-container *ngIf="loginService.isAdmin(); else customerView">
+            <ng-container *ngIf="element.status == 2">
+              <span class="document-item">
+                <span class="document-text" (click)="download(element.document_path, element.id+'')" matTooltip="צפה במסמך">
+                  {{element.document_path}}
+                </span>
+              </span>
+            </ng-container>
+            <ng-container *ngIf="element.status != 2">
+              <span>לא הועלה</span>
+            </ng-container>
+          </ng-container>
+      
+          <!-- Customer view -->
+          <ng-template #customerView>
+            <div *ngIf="element.status == 0" class="document-item">
+              <button mat-icon-button aria-label="upload file" (click)="fileInput.click()" matTooltip="צרף מסמך" matTooltipPosition="left" class="icon-button attach">
+                <mat-icon class="icon">attach_file</mat-icon>
+                <input type="file" #fileInput (change)="onFileSelected($event, element)" style="display: none" />
+              </button>
+            </div>
+      
+            <span *ngIf="element.status == 1" class="document-item">
+              <i class="fa-solid fa-xmark delete-icon" (click)="cancelDocument(element)"></i>
+              <span class="document-text" matTooltip="צפה במסמך" (click)="viewDocument(element.customerFile)">
+                {{element.document_path}}
+              </span>
+            </span>
+      
+            <span *ngIf="element.status == 2" class="document-item">
+              <span class="document-text" matTooltip="צפה במסמך" (click)="download(element.document_path, element.id+'')">
+                {{element.document_path}}
+              </span>
+            </span>
+          </ng-template>
+        </mat-cell>
+      </ng-container>
+      
+      
+
+      <ng-container matColumnDef="document_path2">
+        <mat-header-cell *matHeaderCellDef>מסמך מנהל</mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <!-- Admin view -->
+          <ng-container *ngIf="loginService.isAdmin(); else customerView">
+            <ng-container *ngIf="element.status2 == 0">
+              <button mat-icon-button aria-label="upload file" (click)="fileInput.click()" matTooltip="צרף מסמך"
+                matTooltipPosition="left" class="icon-button attach">
+                <mat-icon class="icon">attach_file</mat-icon>
+                <input type="file" #fileInput (change)="onFileSelected($event, element)" style="display: none" />
+              </button>
+            </ng-container>
+      
+            <ng-container *ngIf="element.status2 == 1">
+              <span class="document-item">
+                <i class="fa-solid fa-xmark delete-icon" (click)="cancelDocument(element)"></i>
+                <span class="document-text" matTooltip="צפה במסמך" (click)="viewDocument(element.adminFile)">
+                  {{element.document_path2}}
+                </span>
+              </span>
+            </ng-container>
+      
+            <ng-container *ngIf="element.status2 == 2">
+              <span class="document-item">
+                <span class="document-text" matTooltip="צפה במסמך" (click)="download(element.document_path2, element.id+'_'+element.id2)">
+                  {{element.document_path2}}
+                </span>
+              </span>
+            </ng-container>
+          </ng-container>
+      
+          <!-- Customer view -->
+          <ng-template #customerView>
+            <span class="document-item" *ngIf="element.status2 == 2" (click)="download(element.document_path2, element.id+'_'+element.id2)"
+              matTooltip="צפה במסמך">
+              <span class="document-text">
+                {{element.document_path2}}
+              </span>
+            </span>
+            <ng-container *ngIf="element.status2 != 2">
+              <span>לא הועלה</span>
+            </ng-container>
+          </ng-template>
+        </mat-cell>
+      </ng-container>
+      
+
+      <ng-container matColumnDef="created_at">
+        <mat-header-cell *matHeaderCellDef>תאריך עדכון</mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          {{ element.status == 2 ? formatDate(element.created_at) : '' }}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="isOk">
+        <mat-header-cell *matHeaderCellDef>אישור</mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          @if(this.loginService.isAdmin()){
+          @if (element.status2==2||element.status2==0) {
+          <mat-checkbox [disabled]="true"
+            [matTooltip]="element.status2 === 2? 'נבחר מסמך':'עדיין לא נבחר מסמך'"></mat-checkbox>}
+          @else{
+          <mat-checkbox (change)="onCheckboxChange($event.checked, element)" [disabled]="element.status2 !== 1"
+            [matTooltip]=" 'אשר מסמך' "></mat-checkbox>}
+          }
+          @else {
+          @if (element.status==2||element.status==0) {
+          <mat-checkbox [disabled]="true"
+            [matTooltip]="element.status === 2? 'נבחר מסמך':'עדיין לא נבחר מסמך'"></mat-checkbox>}
+          @else{
+          <mat-checkbox (change)="onCheckboxChange($event.checked, element)" [disabled]="element.status !== 1"
+            [matTooltip]=" 'אשר מסמך' "></mat-checkbox>}
+          }
+        </mat-cell>
+      </ng-container>
+      <!-- Additional Actions Column -->
+      <ng-container matColumnDef="actions">
+        <mat-header-cell *matHeaderCellDef> פעולות נוספות </mat-header-cell>
+        <mat-cell *matCellDef="let row">
+          @if(this.loginService.isAdmin()){
+          <button mat-icon-button [matMenuTriggerFor]="actionsMenu" matTooltip="אפשרויות נוספות"
+            matTooltipPosition="left" class="icon-button">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #actionsMenu="matMenu">
+            <button mat-menu-item (click)="editTask(row)" class="icon-button edit">
+              <mat-icon>edit</mat-icon>
+              <span>עריכת משימה</span>
+            </button>
+            <button mat-menu-item (click)="deleteTask(row)" class="icon-button delete">
+              <mat-icon>delete</mat-icon>
+              <span>מחיקת משימה</span>
+            </button>
+          </mat-menu>
+          }
+          @else {
+          אין גישה
+          }
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+
+    <!-- כפתור שליחה -->
+    <div class="send-container">
+      <button mat-flat-button (click)="saveFiles()" class="send-button" dir="rtl">
+        <mat-icon class="send-icon">send</mat-icon>
+        <span class="button-text">שלח מסמכים </span>
+      </button>
+    </div>
+    } @else {
+    <div class="no-docs-message">
+      <mat-card class="no-docs-card">
+        <mat-card-content>לא נמצאו עבורך מסמכים</mat-card-content>
+      </mat-card>
+    </div>
+    }
+  </div>
+</main>
+
+<!-- טיפים לניהול מסמכים -->
+<div class="tips-container">
+  <mat-card class="tips-card">
+    <mat-card-title class="tips-title">טיפים לניהול מסמכים</mat-card-title>
+    <mat-card-content class="tips-content">
+      <div class="tips-item">
+        <b>שמור על סדר:</b> ארגן את המסמכים שלך לפי קטגוריות ברורות כדי למצוא אותם בקלות.
+      </div>
+      <div class="tips-item">
+        <b>גיבוי תקופתי:</b> ודא שיש לך גיבוי מסודר של המסמכים החשובים שלך.
+      </div>
+      <div class="tips-item">
+        <b>עדכון שוטף:</b> בדוק את המסמכים שלך מדי פעם כדי להבטיח שהם מעודכנים ותקינים.
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+@if(this.loginService.isAdmin()){
+<button mat-fab color="primary" class="add-button" (click)="addTask()" matTooltip="הוספת משימה"
+  matTooltipPosition="above" style="position: fixed;bottom: 8vh;left: 2vw;z-index: 1000;">
+  <mat-icon class="add-icon">add</mat-icon>
+</button>
+}
